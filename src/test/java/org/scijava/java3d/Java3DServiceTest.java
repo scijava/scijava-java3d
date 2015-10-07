@@ -84,6 +84,12 @@ public class Java3DServiceTest {
 		expected.add(j3dcore2);
 		assertEquals(expected, libExtFiles());
 
+		final File j3dutils = createFile(tmp2, "j3dutils.jar");
+		expected.add(j3dutils);
+		final File jogl = createFile(tmp1, "jogl-2.2.0.jar");
+		expected.add(jogl);
+		assertEquals(expected, libExtFiles());
+
 		final File vecmath = createFile(tmp1, "vecmath.jar");
 		createFile(tmp2, "red-herring");
 		expected.add(vecmath);
@@ -91,6 +97,7 @@ public class Java3DServiceTest {
 
 		System.setProperty("java.ext.dirs", tmp1.getAbsolutePath());
 		expected.remove(j3dcore2);
+		expected.remove(j3dutils);
 		assertEquals(expected, libExtFiles());
 
 		System.setProperty("java.ext.dirs", "");
