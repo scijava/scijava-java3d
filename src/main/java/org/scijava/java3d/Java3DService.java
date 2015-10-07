@@ -30,13 +30,62 @@
 
 package org.scijava.java3d;
 
+import java.io.File;
+import java.util.List;
+
 import org.scijava.service.SciJavaService;
+import org.scijava.ui.UIService;
 
 /**
  * Interface for services which work with Java 3D.
- *
+ * <p>
+ * Historically, Java 3D was installed as an extension to the Java Runtime
+ * Environment, meaning that JAR files and native libraries were placed in the
+ * {@code lib/ext} directory of the JRE installation, or manually appended to
+ * the Java extensions via the {@code java.ext.dirs} system property.
+ * </p>
+ * <p>
+ * However, that approach has many downsides:
+ * </p>
+ * <ul>
+ * <li>Users must install Java 3D manually, independent of the application.</li>
+ * <li>Thus, at runtime, the application cannot manage the version of Java 3D in
+ * the same was that it manages versions of its regular dependencies.</li>
+ * <li>Similarly, at build time, the Java 3D dependency must be treated
+ * specially (e.g., with Maven, using {@code provided} scope in the POM).</li>
+ * </ul>
+ * <p>
+ * Failure to manage Java 3D installations as needed can result in cryptic
+ * version-skew-related error messages, such as {@link NoSuchMethodError} or
+ * even native-library-related errors. This situation is especially prevalent on
+ * OS X, where Java 3D 1.3 was pre-installed in
+ * {@code /System/Library/Java/Extensions} on older versions of the OS, and left
+ * in place after OS upgrades (despite Java itself being uninstalled).
+ * </p>
+ * <p>
+ * These days, Java 3D is built on top of JOGL, and <a
+ * href="https://github.com/hharrison/java3d-core">available on GitHub</a>. But
+ * old installations of Java 3D still lurk, waiting to disrupt applications at
+ * runtime: libraries present on the Java extensions path take precedence over
+ * those on the regular class path.
+ * </p>
+ * <p>
+ * This service mitigates the issue by warning users (via
+ * {@link UIService#showDialog}) if any Java 3D installations are detected as
+ * Java extensions, and asking the user to clean them up before proceeding.
+ * Consequently, applications can now use the modern JOGL version of Java 3D,
+ * without worrying about obsolete versions of Java 3D interfering at runtime.
+ * </p>
+ * 
  * @author Curtis Rueden
  */
 public interface Java3DService extends SciJavaService {
+
+	/**
+	 * Gets the locations where Java 3D is installed as an extension.
+	 * 
+	 * @return a {@link List} of directories containing Java 3D libraries.
+	 */
+	List<File> getLibExtLocations();
 
 }

@@ -30,11 +30,88 @@
 
 package org.scijava.java3d;
 
+import static org.junit.Assert.assertEquals;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.HashSet;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.scijava.Context;
+import org.scijava.util.FileUtils;
+
 /**
  * Tests {@link Java3DService}.
  *
  * @author Curtis Rueden
  */
 public class Java3DServiceTest {
+
+	private Context context;
+	private Java3DService j3d;
+	private File tmp1;
+	private File tmp2;
+
+	@Before
+	public void setUp() throws IOException {
+		context = new Context(Java3DService.class);
+		j3d = context.service(Java3DService.class);
+
+		tmp1 = FileUtils.createTemporaryDirectory("libExt", "1");
+		tmp2 = FileUtils.createTemporaryDirectory("libExt", "2");
+	}
+
+	@After
+	public void tearDown() {
+		FileUtils.deleteRecursively(tmp1);
+		FileUtils.deleteRecursively(tmp2);
+	}
+
+	@Test
+	public void testGetLibExtLocations() throws IOException {
+		final HashSet<File> expected = new HashSet<File>();
+
+		System.setProperty("java.ext.dirs", tmp1.getAbsolutePath() + ":" +
+			tmp2.getAbsolutePath());
+
+		final File j3dcore1 = createFile(tmp1, "j3dcore.jar");
+		expected.add(j3dcore1);
+		assertEquals(expected, libExtFiles());
+
+		final File j3dcore2 = createFile(tmp2, "j3dcore.jar");
+		expected.add(j3dcore2);
+		assertEquals(expected, libExtFiles());
+
+		final File vecmath = createFile(tmp1, "vecmath.jar");
+		createFile(tmp2, "red-herring");
+		expected.add(vecmath);
+		assertEquals(expected, libExtFiles());
+
+		System.setProperty("java.ext.dirs", tmp1.getAbsolutePath());
+		expected.remove(j3dcore2);
+		assertEquals(expected, libExtFiles());
+
+		System.setProperty("java.ext.dirs", "");
+		expected.clear();
+		assertEquals(expected, libExtFiles());
+
+		System.clearProperty("java.ext.dirs");
+		assertEquals(expected, libExtFiles());
+	}
+
+	// -- Helper methods --
+
+	private File createFile(final File dir, final String name) throws IOException
+	{
+		final File file = new File(dir, name);
+		file.createNewFile();
+		return file;
+	}
+
+	private HashSet<File> libExtFiles() {
+		return new HashSet<File>(j3d.getLibExtLocations());
+	}
 
 }
