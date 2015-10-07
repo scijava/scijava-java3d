@@ -34,9 +34,14 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.scijava.event.EventHandler;
+import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.service.AbstractService;
 import org.scijava.service.Service;
+import org.scijava.ui.DialogPrompt.MessageType;
+import org.scijava.ui.UIService;
+import org.scijava.ui.event.UIShownEvent;
 
 /**
  * Default service for working with Java 3D.
@@ -48,6 +53,9 @@ public class DefaultJava3DService extends AbstractService implements
 	Java3DService
 {
 
+	@Parameter
+	private UIService uiService;
+
 	@Override
 	public List<File> getLibExtLocations() {
 		final ArrayList<File> files = new ArrayList<File>();
@@ -57,6 +65,26 @@ public class DefaultJava3DService extends AbstractService implements
 			checkLibExtDirectory(files, dir);
 		}
 		return files;
+	}
+
+	// -- Event handlers --
+
+	/** Checks for obsolete Java 3D installations, warning when any are found. */
+	@EventHandler
+	protected void onEvent(@SuppressWarnings("unused") final UIShownEvent evt) {
+		final List<File> libExtFiles = getLibExtLocations();
+		if (libExtFiles.isEmpty()) return;
+
+		final StringBuilder sb = new StringBuilder();
+		sb.append("There are obsolete Java 3D libraries installed as Java "
+			+ "extensions.");
+		sb.append("\nThe following files were detected:\n");
+		for (final File libExtFile : libExtFiles) {
+			sb.append("\n* " + libExtFile.getAbsolutePath());
+		}
+		sb.append("\n\nThese libraries will very likely cause problems with "
+			+ "3D visualization.\nPlease delete them, then restart the program.");
+		uiService.showDialog(sb.toString(), MessageType.WARNING_MESSAGE);
 	}
 
 	// -- Helper methods --
