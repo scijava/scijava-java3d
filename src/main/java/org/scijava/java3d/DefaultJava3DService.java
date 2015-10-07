@@ -96,13 +96,13 @@ public class DefaultJava3DService extends AbstractService implements
 		final File dirFile = new File(dirPath.isEmpty() ? "." : dirPath);
 		if (!dirFile.exists()) return;
 
-		checkFile(files, new File(dirFile, "j3dcore.jar"));
-		checkFile(files, new File(dirFile, "vecmath.jar"));
-		checkFile(files, new File(dirFile, "j3dutils.jar"));
-		checkFilePattern(files, dirFile, "j3d-core.*");
-		checkFilePattern(files, dirFile, "vecmath.*");
-		checkFilePattern(files, dirFile, "jogl.*");
-		// Maybe libJ3DUtils.jnilib libJ3DAudio.jnilib
+		checkFilePattern(files, dirFile, "gluegen-rt(-[0-9].*)?\\.jar");
+		checkFilePattern(files, dirFile, "j3d-core(-[0-9].*)?\\.jar");
+		checkFilePattern(files, dirFile, "j3d-core-utils(-[0-9].*)?\\.jar");
+		checkFilePattern(files, dirFile, "j3dcore(-[0-9].*)?\\.jar");
+		checkFilePattern(files, dirFile, "j3dutils(-[0-9].*)?\\.jar");
+		checkFilePattern(files, dirFile, "jogl(-[0-9].*)?\\.jar");
+		checkFilePattern(files, dirFile, "vecmath(-[0-9].*)?\\.jar");
 	}
 
 	private void checkFilePattern(final ArrayList<File> files,
@@ -118,10 +118,6 @@ public class DefaultJava3DService extends AbstractService implements
 		for (final File f : dirFile.listFiles(filter)) {
 			files.add(f);
 		}
-	}
-
-	private void checkFile(ArrayList<File> files, File file) {
-		if (file.exists()) files.add(file);
 	}
 
 }
