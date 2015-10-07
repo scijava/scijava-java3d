@@ -91,14 +91,14 @@ public class DefaultJava3DService extends AbstractService implements
 	// -- Helper methods --
 
 	private void checkLibExtDirectory(final ArrayList<File> files,
-		final String dir)
+		final String dirPath)
 	{
-		checkFile(files, new File(dir, "j3dcore.jar"));
-		checkFile(files, new File(dir, "vecmath.jar"));
-		checkFile(files, new File(dir, "j3dutils.jar"));
-		checkFilePattern(files, dir, "j3d-core.*");
-		checkFilePattern(files, dir, "vecmath.*");
-		checkFilePattern(files, dir, "jogl.*");
+		checkFile(files, new File(dirPath, "j3dcore.jar"));
+		checkFile(files, new File(dirPath, "vecmath.jar"));
+		checkFile(files, new File(dirPath, "j3dutils.jar"));
+		checkFilePattern(files, dirPath, "j3d-core.*");
+		checkFilePattern(files, dirPath, "vecmath.*");
+		checkFilePattern(files, dirPath, "jogl.*");
 		// Maybe libJ3DUtils.jnilib libJ3DAudio.jnilib
 	}
 
