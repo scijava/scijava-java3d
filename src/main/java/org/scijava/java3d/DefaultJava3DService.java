@@ -31,6 +31,7 @@
 package org.scijava.java3d;
 
 import java.io.File;
+import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -95,6 +96,25 @@ public class DefaultJava3DService extends AbstractService implements
 		checkFile(files, new File(dir, "j3dcore.jar"));
 		checkFile(files, new File(dir, "vecmath.jar"));
 		checkFile(files, new File(dir, "j3dutils.jar"));
+		checkFilePattern( files, dir, "j3d-core*");
+		checkFilePattern( files, dir, "vecmath*");
+		checkFilePattern( files, dir, "jogl*");
+		// Maybe libJ3DUtils.jnilib libJ3DAudio.jnilib 
+	}
+	
+	private void checkFilePattern(ArrayList<File> files, String dir, String argPattern) {
+		final String pattern = argPattern.replace(".","\\.").replace("*",".*");	    
+	    
+	    if( dir.isEmpty() ) dir = ".";
+	    else if( (new File(dir)).exists() ) {
+		    for( File f : new File( dir ).listFiles( new FilenameFilter(){
+		                       public boolean accept( File dir, String name ) { 
+		                           return name.matches( pattern );
+		                       }
+		                    })){
+		    	files.add(f);
+		    }
+	    }
 	}
 
 	private void checkFile(ArrayList<File> files, File file) {
