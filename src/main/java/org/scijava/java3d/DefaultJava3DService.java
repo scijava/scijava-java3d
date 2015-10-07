@@ -96,25 +96,30 @@ public class DefaultJava3DService extends AbstractService implements
 		checkFile(files, new File(dir, "j3dcore.jar"));
 		checkFile(files, new File(dir, "vecmath.jar"));
 		checkFile(files, new File(dir, "j3dutils.jar"));
-		checkFilePattern( files, dir, "j3d-core*");
-		checkFilePattern( files, dir, "vecmath*");
-		checkFilePattern( files, dir, "jogl*");
-		// Maybe libJ3DUtils.jnilib libJ3DAudio.jnilib 
+		checkFilePattern(files, dir, "j3d-core*");
+		checkFilePattern(files, dir, "vecmath*");
+		checkFilePattern(files, dir, "jogl*");
+		// Maybe libJ3DUtils.jnilib libJ3DAudio.jnilib
 	}
-	
-	private void checkFilePattern(ArrayList<File> files, String dir, String argPattern) {
-		final String pattern = argPattern.replace(".","\\.").replace("*",".*");	    
-	    
-	    if( dir.isEmpty() ) dir = ".";
-	    else if( (new File(dir)).exists() ) {
-		    for( File f : new File( dir ).listFiles( new FilenameFilter(){
-		                       public boolean accept( File dir, String name ) { 
-		                           return name.matches( pattern );
-		                       }
-		                    })){
-		    	files.add(f);
-		    }
-	    }
+
+	private void checkFilePattern(final ArrayList<File> files,
+		final String dirPath, final String argPattern)
+	{
+		final String pattern = argPattern.replace(".", "\\.").replace("*", ".*");
+
+		final File dirFile = new File(dirPath.isEmpty() ? "." : dirPath);
+		if (!dirFile.exists()) return;
+
+		final FilenameFilter filter = new FilenameFilter() {
+
+			@Override
+			public boolean accept(final File dir, final String name) {
+				return name.matches(pattern);
+			}
+		};
+		for (final File f : dirFile.listFiles(filter)) {
+			files.add(f);
+		}
 	}
 
 	private void checkFile(ArrayList<File> files, File file) {
