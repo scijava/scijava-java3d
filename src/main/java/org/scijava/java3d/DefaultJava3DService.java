@@ -93,21 +93,21 @@ public class DefaultJava3DService extends AbstractService implements
 	private void checkLibExtDirectory(final ArrayList<File> files,
 		final String dirPath)
 	{
-		checkFile(files, new File(dirPath, "j3dcore.jar"));
-		checkFile(files, new File(dirPath, "vecmath.jar"));
-		checkFile(files, new File(dirPath, "j3dutils.jar"));
-		checkFilePattern(files, dirPath, "j3d-core.*");
-		checkFilePattern(files, dirPath, "vecmath.*");
-		checkFilePattern(files, dirPath, "jogl.*");
+		final File dirFile = new File(dirPath.isEmpty() ? "." : dirPath);
+		if (!dirFile.exists()) return;
+
+		checkFile(files, new File(dirFile, "j3dcore.jar"));
+		checkFile(files, new File(dirFile, "vecmath.jar"));
+		checkFile(files, new File(dirFile, "j3dutils.jar"));
+		checkFilePattern(files, dirFile, "j3d-core.*");
+		checkFilePattern(files, dirFile, "vecmath.*");
+		checkFilePattern(files, dirFile, "jogl.*");
 		// Maybe libJ3DUtils.jnilib libJ3DAudio.jnilib
 	}
 
 	private void checkFilePattern(final ArrayList<File> files,
-		final String dirPath, final String regex)
+		final File dirFile, final String regex)
 	{
-		final File dirFile = new File(dirPath.isEmpty() ? "." : dirPath);
-		if (!dirFile.exists()) return;
-
 		final FilenameFilter filter = new FilenameFilter() {
 
 			@Override
