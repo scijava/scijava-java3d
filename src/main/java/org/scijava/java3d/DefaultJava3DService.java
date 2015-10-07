@@ -91,34 +91,33 @@ public class DefaultJava3DService extends AbstractService implements
 	// -- Helper methods --
 
 	private void checkLibExtDirectory(final ArrayList<File> files,
-		final String dir)
+		final String dirPath)
 	{
-		checkFile(files, new File(dir, "j3dcore.jar"));
-		checkFile(files, new File(dir, "vecmath.jar"));
-		checkFile(files, new File(dir, "j3dutils.jar"));
-		checkFilePattern( files, dir, "j3d-core*");
-		checkFilePattern( files, dir, "vecmath*");
-		checkFilePattern( files, dir, "jogl*");
-		// Maybe libJ3DUtils.jnilib libJ3DAudio.jnilib 
-	}
-	
-	private void checkFilePattern(ArrayList<File> files, String dir, String argPattern) {
-		final String pattern = argPattern.replace(".","\\.").replace("*",".*");	    
-	    
-	    if( dir.isEmpty() ) dir = ".";
-	    else if( (new File(dir)).exists() ) {
-		    for( File f : new File( dir ).listFiles( new FilenameFilter(){
-		                       public boolean accept( File dir, String name ) { 
-		                           return name.matches( pattern );
-		                       }
-		                    })){
-		    	files.add(f);
-		    }
-	    }
+		final File dirFile = new File(dirPath.isEmpty() ? "." : dirPath);
+		if (!dirFile.exists()) return;
+
+		checkFilePattern(files, dirFile, "gluegen-rt(-[0-9].*)?\\.jar");
+		checkFilePattern(files, dirFile, "j3d-core(-[0-9].*)?\\.jar");
+		checkFilePattern(files, dirFile, "j3d-core-utils(-[0-9].*)?\\.jar");
+		checkFilePattern(files, dirFile, "j3dcore(-[0-9].*)?\\.jar");
+		checkFilePattern(files, dirFile, "j3dutils(-[0-9].*)?\\.jar");
+		checkFilePattern(files, dirFile, "jogl(-[0-9].*)?\\.jar");
+		checkFilePattern(files, dirFile, "vecmath(-[0-9].*)?\\.jar");
 	}
 
-	private void checkFile(ArrayList<File> files, File file) {
-		if (file.exists()) files.add(file);
+	private void checkFilePattern(final ArrayList<File> files,
+		final File dirFile, final String regex)
+	{
+		final FilenameFilter filter = new FilenameFilter() {
+
+			@Override
+			public boolean accept(final File dir, final String name) {
+				return name.matches(regex);
+			}
+		};
+		for (final File f : dirFile.listFiles(filter)) {
+			files.add(f);
+		}
 	}
 
 }
