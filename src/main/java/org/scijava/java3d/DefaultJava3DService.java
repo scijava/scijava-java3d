@@ -96,17 +96,15 @@ public class DefaultJava3DService extends AbstractService implements
 		checkFile(files, new File(dir, "j3dcore.jar"));
 		checkFile(files, new File(dir, "vecmath.jar"));
 		checkFile(files, new File(dir, "j3dutils.jar"));
-		checkFilePattern(files, dir, "j3d-core*");
-		checkFilePattern(files, dir, "vecmath*");
-		checkFilePattern(files, dir, "jogl*");
+		checkFilePattern(files, dir, "j3d-core.*");
+		checkFilePattern(files, dir, "vecmath.*");
+		checkFilePattern(files, dir, "jogl.*");
 		// Maybe libJ3DUtils.jnilib libJ3DAudio.jnilib
 	}
 
 	private void checkFilePattern(final ArrayList<File> files,
-		final String dirPath, final String argPattern)
+		final String dirPath, final String regex)
 	{
-		final String pattern = argPattern.replace(".", "\\.").replace("*", ".*");
-
 		final File dirFile = new File(dirPath.isEmpty() ? "." : dirPath);
 		if (!dirFile.exists()) return;
 
@@ -114,7 +112,7 @@ public class DefaultJava3DService extends AbstractService implements
 
 			@Override
 			public boolean accept(final File dir, final String name) {
-				return name.matches(pattern);
+				return name.matches(regex);
 			}
 		};
 		for (final File f : dirFile.listFiles(filter)) {
