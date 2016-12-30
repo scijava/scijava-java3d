@@ -2,7 +2,7 @@
  * #%L
  * Utility classes for working with Java 3D.
  * %%
- * Copyright (C) 2015 Board of Regents of the University of
+ * Copyright (C) 2015 - 2016 Board of Regents of the University of
  * Wisconsin-Madison.
  * %%
  * Redistribution and use in source and binary forms, with or without
