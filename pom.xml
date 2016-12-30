@@ -5,10 +5,11 @@
 	<parent>
 		<groupId>org.scijava</groupId>
 		<artifactId>pom-scijava</artifactId>
-		<version>9.0.0</version>
+		<version>12.0.0</version>
 		<relativePath />
 	</parent>
 
+	<groupId>org.scijava</groupId>
 	<artifactId>scijava-java3d</artifactId>
 	<version>0.1.0-SNAPSHOT</version>
 
@@ -16,6 +17,10 @@
 	<description>Utility classes for working with Java 3D.</description>
 	<url>https://github.com/scijava/scijava-java3d</url>
 	<inceptionYear>2015</inceptionYear>
+	<organization>
+		<name>SciJava</name>
+		<url>http://scijava.org/</url>
+	</organization>
 	<licenses>
 		<license>
 			<name>Simplified BSD License</name>
@@ -29,8 +34,12 @@
 			<name>Curtis Rueden</name>
 			<url>http://imagej.net/User:Rueden</url>
 			<roles>
-				<role>architect</role>
-				<role>developer</role>
+				<role>founder</role>
+				<role>lead</role>
+				<role>debugger</role>
+				<role>reviewer</role>
+				<role>support</role>
+				<role>maintainer</role>
 			</roles>
 		</developer>
 	</developers>
@@ -43,6 +52,16 @@
 			<name>None</name>
 		</contributor>
 	</contributors>
+
+	<mailingLists>
+		<mailingList>
+			<name>SciJava</name>
+			<subscribe>https://groups.google.com/group/scijava</subscribe>
+			<unsubscribe>https://groups.google.com/group/scijava</unsubscribe>
+			<post>scijava.com</post>
+			<archive>https://groups.google.com/group/scijava</archive>
+		</mailingList>
+	</mailingLists>
 
 	<scm>
 		<connection>scm:git:git://github.com/scijava/scijava-java3d</connection>
@@ -58,6 +77,13 @@
 		<system>Jenkins</system>
 		<url>http://jenkins.imagej.net/job/SciJava-java3d/</url>
 	</ciManagement>
+
+	<properties>
+		<package-name>org.scijava.java3d</package-name>
+		<license.licenseName>bsd_2</license.licenseName>
+		<license.copyrightOwners>Board of Regents of the University of
+Wisconsin-Madison.</license.copyrightOwners>
+	</properties>
 
 	<dependencies>
 		<!-- SciJava dependencies -->
@@ -97,5 +123,4 @@ Wisconsin-Madison.</organizationName>
 			</plugin>
 		</plugins>
 	</build>
-
 </project>
