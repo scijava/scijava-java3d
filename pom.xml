@@ -74,8 +74,8 @@
 		<url>https://github.com/scijava/scijava-java3d/issues</url>
 	</issueManagement>
 	<ciManagement>
-		<system>Jenkins</system>
-		<url>http://jenkins.imagej.net/job/SciJava-java3d/</url>
+		<system>Travis CI</system>
+		<url>https://travis-ci.org/scijava/scijava-java3d</url>
 	</ciManagement>
 
 	<properties>
