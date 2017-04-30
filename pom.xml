@@ -10,7 +10,7 @@
 	</parent>
 
 	<artifactId>scijava-java3d</artifactId>
-	<version>0.1.0-SNAPSHOT</version>
+	<version>0.1.1-SNAPSHOT</version>
 
 	<name>SciJava Java 3D Tools</name>
 	<description>Utility classes for working with Java 3D.</description>
