@@ -63,7 +63,7 @@
 	</mailingLists>
 
 	<scm>
-		<connection>scm:git:git://github.com/scijava/scijava-java3d</connection>
+		<connection>scm:git:https://github.com/scijava/scijava-java3d</connection>
 		<developerConnection>scm:git:git@github.com:scijava/scijava-java3d</developerConnection>
 		<tag>HEAD</tag>
 		<url>https://github.com/scijava/scijava-java3d</url>
