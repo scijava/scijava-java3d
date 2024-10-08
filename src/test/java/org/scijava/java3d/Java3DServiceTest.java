@@ -31,10 +31,13 @@
 package org.scijava.java3d;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.junit.After;
 import org.junit.Before;
@@ -65,60 +68,70 @@ public class Java3DServiceTest {
 
 	@After
 	public void tearDown() {
+		context.dispose();
 		FileUtils.deleteRecursively(tmp1);
 		FileUtils.deleteRecursively(tmp2);
 	}
 
 	@Test
 	public void testGetLibExtLocations() throws IOException {
-		final HashSet<File> expected = new HashSet<File>();
+		final HashSet<String> expected = new HashSet<>();
 
 		System.setProperty("java.ext.dirs", tmp1.getAbsolutePath() + ":" +
 			tmp2.getAbsolutePath());
 
-		final File j3dcore1 = createFile(tmp1, "j3dcore.jar");
+		final String j3dcore1 = createFile(tmp1, "j3dcore.jar");
 		expected.add(j3dcore1);
-		assertEquals(expected, libExtFiles());
+		assertEquals(expected, libExtPaths());
 
-		final File j3dcore2 = createFile(tmp2, "j3dcore.jar");
+		final String j3dcore2 = createFile(tmp2, "j3dcore.jar");
 		expected.add(j3dcore2);
-		assertEquals(expected, libExtFiles());
+		assertEquals(expected, libExtPaths());
 
-		final File j3dutils = createFile(tmp2, "j3dutils.jar");
+		final String j3dutils = createFile(tmp2, "j3dutils.jar");
 		expected.add(j3dutils);
-		final File jogl = createFile(tmp1, "jogl-2.2.0.jar");
+		final String jogl = createFile(tmp1, "jogl-2.2.0.jar");
 		expected.add(jogl);
-		assertEquals(expected, libExtFiles());
+		assertEquals(expected, libExtPaths());
 
-		final File vecmath = createFile(tmp1, "vecmath.jar");
+		final String vecmath = createFile(tmp1, "vecmath.jar");
 		createFile(tmp2, "red-herring");
 		expected.add(vecmath);
-		assertEquals(expected, libExtFiles());
+		assertEquals(expected, libExtPaths());
 
 		System.setProperty("java.ext.dirs", tmp1.getAbsolutePath());
 		expected.remove(j3dcore2);
 		expected.remove(j3dutils);
-		assertEquals(expected, libExtFiles());
+		assertEquals(expected, libExtPaths());
 
 		System.setProperty("java.ext.dirs", "");
 		expected.clear();
-		assertEquals(expected, libExtFiles());
+		assertEquals(expected, libExtPaths());
 
 		System.clearProperty("java.ext.dirs");
-		assertEquals(expected, libExtFiles());
+		assertEquals(expected, libExtPaths());
 	}
 
 	// -- Helper methods --
 
-	private File createFile(final File dir, final String name) throws IOException
+	private String createFile(final File dir, final String name) throws IOException
 	{
 		final File file = new File(dir, name);
-		file.createNewFile();
-		return file;
+		assertTrue(file.createNewFile());
+		return truePath(file);
 	}
 
-	private HashSet<File> libExtFiles() {
-		return new HashSet<File>(j3d.getLibExtLocations());
+	private Set<String> libExtPaths() {
+		return j3d.getLibExtLocations().stream()
+			.map(f -> truePath(f))
+			.collect(Collectors.toSet());
 	}
 
+	private static String truePath(File f) {
+		try {
+			return f.getCanonicalPath();
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
 }
