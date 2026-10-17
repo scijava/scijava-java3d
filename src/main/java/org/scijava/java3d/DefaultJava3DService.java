@@ -1,9 +1,8 @@
 /*
  * #%L
- * Utility classes for working with Java 3D.
+ * Convenience layer for depending on Java 3D.
  * %%
- * Copyright (C) 2015 - 2016 Board of Regents of the University of
- * Wisconsin-Madison.
+ * Copyright (C) 2015 - 2026 SciJava developers.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
